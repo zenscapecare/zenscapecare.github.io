@@ -90,20 +90,33 @@
             list-style-type: none;
             padding: 0;
             display: inline-block;
-            text-align: left;
+            text-align: center;
         }
 
         .upi-links li {
-            margin-bottom: 10px;
+            display: inline-block;
+            margin: 10px;
         }
 
         .upi-links a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             color: #007BFF;
             text-decoration: none;
+            width: 80px;
         }
 
-        .upi-links a:hover {
-            text-decoration: underline;
+        .upi-links a img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+
+        .upi-links a span {
+            font-size: 14px;
+            color: #333;
         }
 
         .timer {
@@ -187,6 +200,19 @@
             .early-bird {
                 font-size: 16px;
             }
+
+            .upi-links a {
+                width: 60px;
+            }
+
+            .upi-links a img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .upi-links a span {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -214,14 +240,34 @@
             <button id="copyButton" title="Copy UPI ID">📋 Copy</button>
         </div>
 
-        <!-- UPI Payment Links -->
+        <!-- UPI Payment Links with Logos -->
         <div class="upi-links">
-            <p>Click on a link below to pay using your preferred UPI app:</p>
+            <p>Click on a logo below to pay using your preferred UPI app:</p>
             <ul id="links">
-                <li><a href="#" id="gpayLink">Google Pay</a></li>
-                <li><a href="#" id="paytmLink">Paytm</a></li>
-                <li><a href="#" id="phonepeLink">PhonePe</a></li>
-                <li><a href="#" id="upiLink">Other UPI</a></li>
+                <li>
+                    <a href="#" id="gpayLink">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/Google_Pay_%28GPay%29_Logo.svg" alt="Google Pay">
+                        <span>Google Pay</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="paytmLink">
+                        <img src="https://assetscdn1.paytm.com/images/catalog/view_item/773952/1626257867034.png" alt="Paytm">
+                        <span>Paytm</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="phonepeLink">
+                        <img src="https://www.phonepe.com/images/phonepe-logo-white.png" alt="PhonePe">
+                        <span>PhonePe</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="upiLink">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/BHIM_UPI_Logo.svg" alt="Other UPI">
+                        <span>Other UPI</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -237,14 +283,6 @@
                 <li>Proceed to make the payment.</li>
             </ol>
         </div>
-
-        <!-- QR Code (Optional) -->
-        <!--
-        <div class="qr-code">
-            <p>Alternatively, scan the QR code below to make the payment:</p>
-            <img src="path-to-qr-code-image.png" alt="UPI QR Code" style="max-width: 200px;">
-        </div>
-        -->
 
         <p class="important">Important: Your registration will be confirmed upon successful payment. In case of any issues with payment, please reach out to us via WhatsApp.</p>
         <p>Once the payment is confirmed, you will receive a confirmation message via WhatsApp by the end of the day. You will receive the link to the webinar one hour before the workshop starts.</p>
