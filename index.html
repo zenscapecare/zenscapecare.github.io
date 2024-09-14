@@ -265,25 +265,25 @@
             <p>Click on a logo below to pay using your preferred UPI app:</p>
             <ul id="links">
                 <li>
-                    <a href="#" id="gpayLink">
+                    <a href="#" id="gpayLink" data-app="GPAY">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/Google_Pay_%28GPay%29_Logo.svg" alt="Google Pay">
                         <span>Google Pay</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" id="paytmLink">
+                    <a href="#" id="paytmLink" data-app="PAYTM">
                         <img src="https://assetscdn1.paytm.com/images/catalog/view_item/773952/1626257867034.png" alt="Paytm">
                         <span>Paytm</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" id="phonepeLink">
+                    <a href="#" id="phonepeLink" data-app="PHONEPE">
                         <img src="https://www.phonepe.com/images/phonepe-logo-white.png" alt="PhonePe">
                         <span>PhonePe</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" id="upiLink">
+                    <a href="#" id="upiLink" data-app="OTHER">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/BHIM_UPI_Logo.svg" alt="Other UPI">
                         <span>Other UPI</span>
                     </a>
@@ -356,34 +356,55 @@
         // Update manual note
         manualNoteElement.innerText = transactionNote;
 
-        // Function to generate UPI URLs
-        function generateUpiUrls() {
-            const params = {
+        // Function to generate UPI parameters
+        function getUpiParams() {
+            return {
                 pa: upiId,
                 pn: payeeName,
                 am: amount,
                 cu: 'INR',
-                tn: transactionNote
+                tn: transactionNote,
+                // mc, tr can be added if needed
             };
+        }
 
+        // Function to open UPI app with dynamic URL
+        function openPaymentApp(payApp) {
+            let baseScheme = '';
+            switch (payApp) {
+                case 'PAYTM':
+                    baseScheme = 'paytmmp://';
+                    break;
+                case 'GPAY':
+                    baseScheme = 'tez://upi/';
+                    break;
+                case 'PHONEPE':
+                    baseScheme = 'phonepe://';
+                    break;
+                default:
+                    baseScheme = 'upi://pay?';
+            }
+
+            const params = getUpiParams();
             const queryString = Object.keys(params)
                 .map(key => `${key}=${encodeURIComponent(params[key])}`)
                 .join('&');
 
-            const upiUrl = `upi://pay?${queryString}`;
+            let url = '';
+            if (payApp === 'GPAY') {
+                url = `${baseScheme}pay?${queryString}`;
+            } else if (payApp === 'PAYTM' || payApp === 'PHONEPE') {
+                url = `${baseScheme}pay?${queryString}`;
+            } else {
+                url = `${baseScheme}${queryString}`;
+            }
 
-            // Update the hyperlinks
-            document.getElementById('gpayLink').href = upiUrl;
-            document.getElementById('paytmLink').href = upiUrl;
-            document.getElementById('phonepeLink').href = upiUrl;
-            document.getElementById('upiLink').href = upiUrl;
+            // Open the URL
+            window.location.href = url;
         }
 
-        // Initial generation of UPI URLs
-        generateUpiUrls();
-
         // Timer function
-        const timer = setInterval(function() {
+        const timer = setInterval(function () {
             const minutes = Math.floor(time / 60);
             const seconds = time % 60;
             countdownElement.innerText = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
@@ -409,9 +430,6 @@
 
                 earlyBirdOfferElement.innerText = "Offer expired. Please pay ₹999 to complete your registration.";
                 earlyBirdOfferElement.style.color = "#ff0000";
-
-                // Regenerate UPI URLs with the new amount and transaction note
-                generateUpiUrls();
             }
         }, 1000);
 
@@ -429,8 +447,8 @@
 
         // Attach event listeners to all copy buttons
         const copyButtons = document.querySelectorAll('.copy-button');
-        copyButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
+        copyButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
                 const targetId = this.getAttribute('data-copy-target');
                 copyToClipboard(targetId);
             });
@@ -438,10 +456,11 @@
 
         // Handle clicks on links
         const links = document.querySelectorAll('#links a');
-        links.forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                // Allow the default action for all devices
-                // Note: UPI URLs may not work on some browsers or devices
+        links.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                const app = this.getAttribute('data-app');
+                openPaymentApp(app);
             });
         });
     </script>
