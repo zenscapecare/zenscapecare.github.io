@@ -409,15 +409,8 @@
         const links = document.querySelectorAll('#links a');
         links.forEach(function(link) {
             link.addEventListener('click', function(e) {
-                // For iOS devices, Intent URLs won't work, so provide alternative instructions
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                if (isIOS) {
-                    alert('UPI payment links may not work on iOS devices. Please use manual payment instructions.');
-                    e.preventDefault();
-                    return;
-                }
-                // For Android devices, proceed with the Intent URL
-                // No need to prevent default action
+                // Allow the default action for all devices
+                // Note: UPI Intent URLs may not work on iOS devices
             });
         });
     </script>
