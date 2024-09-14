@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>UPI Payment</title>
+    <!-- Viewport Meta Tag for Mobile Responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* CSS Styles */
+        /* CSS Styles - Mobile First Approach */
 
         * {
             margin: 0;
@@ -16,30 +18,25 @@
             font-family: 'Arial', sans-serif;
             background-color: #F2F6FE;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
         }
 
         .content {
             padding: 20px;
-            max-width: 500px;
-            width: 100%;
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 20px;
             margin-bottom: 15px;
             color: #333;
+            text-align: center;
         }
 
         p {
-            font-size: 16px;
+            font-size: 14px;
             color: #555;
             line-height: 1.6;
             margin-bottom: 10px;
@@ -59,7 +56,7 @@
         }
 
         .upi-container span {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             color: #333;
         }
@@ -68,9 +65,9 @@
             border: none;
             background-color: #4CAF50;
             color: white;
-            font-size: 14px;
+            font-size: 12px;
             margin-left: 8px;
-            padding: 6px 10px;
+            padding: 4px 8px;
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -89,12 +86,12 @@
         .upi-links ul {
             list-style-type: none;
             padding: 0;
-            display: inline-block;
-            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .upi-links li {
-            display: inline-block;
             margin: 10px;
         }
 
@@ -104,55 +101,59 @@
             align-items: center;
             color: #007BFF;
             text-decoration: none;
-            width: 80px;
+            width: 60px;
         }
 
         .upi-links a img {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
             margin-bottom: 5px;
         }
 
         .upi-links a span {
-            font-size: 14px;
+            font-size: 12px;
             color: #333;
+            text-align: center;
         }
 
         .timer {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #ff0000;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .pricing {
-            font-size: 20px;
+            font-size: 18px;
             margin: 15px 0;
+            text-align: center;
         }
 
         .pricing .original-price {
             text-decoration: line-through;
             color: #888;
             margin-right: 10px;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .pricing .discounted-price {
             font-weight: bold;
             color: #28a745;
-            font-size: 22px;
+            font-size: 20px;
         }
 
         .early-bird {
-            font-size: 18px;
+            font-size: 16px;
             color: #28a745;
             margin-bottom: 10px;
             font-weight: bold;
+            text-align: center;
         }
 
         .contact-info {
-            font-size: 14px;
+            font-size: 12px;
             color: #555;
             margin-top: 20px;
         }
@@ -176,61 +177,61 @@
             position: absolute;
             right: 0;
             top: 0;
-            font-size: 12px;
-            padding: 4px 8px;
+            font-size: 10px;
+            padding: 3px 6px;
         }
 
-        .qr-code {
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        @media (max-width: 600px) {
+        /* Media Queries for Larger Screens */
+        @media (min-width: 600px) {
             h1 {
-                font-size: 20px;
+                font-size: 24px;
             }
 
             p {
-                font-size: 14px;
+                font-size: 16px;
             }
 
             .upi-container span {
-                font-size: 14px;
+                font-size: 16px;
             }
 
             .copy-button {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
+
+            .pricing .original-price {
+                font-size: 18px;
+            }
+
+            .pricing .discounted-price {
+                font-size: 22px;
+            }
+
+            .early-bird {
+                font-size: 18px;
+            }
+
+            .upi-links a {
+                width: 80px;
+            }
+
+            .upi-links a img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .upi-links a span {
+                font-size: 14px;
+            }
+
+            .manual-instructions .copy-button {
                 font-size: 12px;
                 padding: 4px 8px;
             }
 
-            .pricing .original-price {
-                font-size: 16px;
-            }
-
-            .pricing .discounted-price {
-                font-size: 20px;
-            }
-
-            .early-bird {
-                font-size: 16px;
-            }
-
-            .upi-links a {
-                width: 60px;
-            }
-
-            .upi-links a img {
-                width: 50px;
-                height: 50px;
-            }
-
-            .upi-links a span {
-                font-size: 12px;
-            }
-
-            .manual-instructions .copy-button {
-                font-size: 10px;
-                padding: 3px 6px;
+            .contact-info {
+                font-size: 14px;
             }
         }
     </style>
