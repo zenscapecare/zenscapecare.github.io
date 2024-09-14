@@ -48,35 +48,6 @@
             margin-bottom: 15px;
         }
 
-        .upi-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 15px 0;
-        }
-
-        .upi-container span {
-            font-size: 14px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .copy-button {
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 12px;
-            margin-left: 8px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .copy-button:hover {
-            background-color: #45a049;
-        }
-
         /* Styles for center-aligning the links */
         .upi-links {
             margin: 20px 0;
@@ -181,6 +152,23 @@
             padding: 3px 6px;
         }
 
+        /* Copy Button Styles */
+        .copy-button {
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 12px;
+            margin-left: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+
         /* Media Queries for Larger Screens */
         @media (min-width: 600px) {
             h1 {
@@ -188,10 +176,6 @@
             }
 
             p {
-                font-size: 16px;
-            }
-
-            .upi-container span {
                 font-size: 16px;
             }
 
@@ -250,14 +234,6 @@
         <div class="pricing">
             <span class="original-price">₹999</span>
             <span class="discounted-price" id="discountedPrice">₹449</span>
-        </div>
-
-        <p>Please complete your payment of <span id="price">₹449</span> to the UPI ID:</p>
-
-        <!-- Display UPI ID -->
-        <div class="upi-container">
-            <span id="upiId">archoudhury1995@oksbi</span>
-            <button class="copy-button" data-copy-target="upiId" title="Copy UPI ID">📋 Copy</button>
         </div>
 
         <!-- UPI Payment Links with Logos -->
@@ -364,7 +340,6 @@
                 am: amount,
                 cu: 'INR',
                 tn: transactionNote,
-                // mc, tr can be added if needed
             };
         }
 
@@ -417,7 +392,6 @@
                 countdownElement.innerText = "00:00";
                 discountedPriceElement.innerText = "₹999";
                 document.querySelector('.original-price').style.display = "none";
-                priceElement.innerText = "₹999";
                 currentPriceElement.innerText = "999";
                 manualAmountElement.innerText = "999";
                 amount = '999'; // Update amount
