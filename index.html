@@ -1,56 +1,175 @@
 <!DOCTYPE html>
-<html>
-<style>
-body, html {
-  height: 100%;
-  margin: 0;
-}
-
-.bgimg {
-  background-image: url('/bg.jpg');
-  height: 100%;
-  background-position: center;
-  background-size: cover;
-  position: relative;
-  color: white;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 25px;
-}
-
-.topleft {
-  position: absolute;
-  top: 0;
-  left: 16px;
-}
-
-.bottomleft {
-  position: absolute;
-  bottom: 0;
-  left: 16px;
-}
-
-.middle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-hr {
-  margin: auto;
-  width: 40%;
-}
-</style>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UPI Payment</title>
+    <style>
+        /* [Your existing CSS styles remain unchanged] */
+    </style>
+</head>
 <body>
+    <div class="content">
+        <h1>Thank You for Registering!</h1>
 
-<div class="bgimg">
-  <div class="middle">
-    <h1>COMING SOON</h1>
-    <hr>
-    <p>35 days left</p>
-  </div>
-</div>
+        <!-- Early Bird Offer -->
+        <div class="early-bird" id="earlyBirdOffer">Early Bird Offer: Pay ₹449 now!</div>
 
+        <!-- Timer -->
+        <div class="timer">Offer Price: ₹<span id="currentPrice">449</span> | Time left: <span id="countdown">10:00</span></div>
+
+        <!-- Pricing section with slashed price -->
+        <div class="pricing">
+            <span class="original-price">₹999</span>
+            <span class="discounted-price" id="discountedPrice">₹449</span>
+        </div>
+
+        <p>Please complete your payment of <span id="price">₹449</span> to the UPI ID:</p>
+
+        <!-- Display UPI ID -->
+        <div class="upi-container">
+            <span id="upiId">archoudhury1995@oksbi</span>
+            <button id="copyButton" title="Copy UPI ID">📋 Copy</button>
+        </div>
+
+        <!-- UPI Payment Links -->
+        <div class="upi-links">
+            <p>Click on a link below to pay using your preferred UPI app:</p>
+            <ul id="links">
+                <li><a href="#" id="gpayLink">Google Pay</a></li>
+                <li><a href="#" id="paytmLink">Paytm</a></li>
+                <li><a href="#" id="phonepeLink">PhonePe</a></li>
+                <li><a href="#" id="upiLink">Other UPI</a></li>
+            </ul>
+        </div>
+
+        <p class="important">Important: Your registration will be confirmed upon successful payment. In case of any issues with payment, please reach out to us via WhatsApp.</p>
+        <p>Once the payment is confirmed, you will receive a confirmation message via WhatsApp by the end of the day. You will receive the link to the webinar one hour before the workshop starts.</p>
+
+        <!-- Contact information -->
+        <div class="contact-info">
+            <p>For any further queries, feel free to contact us at:</p>
+            <p>+91-9903150442 or +91-8420635273.</p>
+        </div>
+    </div>
+
+    <script>
+        // Timer for 10 minutes countdown
+        let time = 600; // 10 minutes in seconds
+        const countdownElement = document.getElementById("countdown");
+        const priceElement = document.getElementById("price");
+        const discountedPriceElement = document.getElementById("discountedPrice");
+        const currentPriceElement = document.getElementById("currentPrice");
+        const earlyBirdOfferElement = document.getElementById("earlyBirdOffer");
+
+        const upiId = 'archoudhury1995@oksbi';
+        const payeeName = 'ARPITA ROYCHOUDHURY';
+        let amount = '449'; // Initial amount
+
+        // Capture the page open time
+        const pageOpenTime = new Date();
+
+        // Function to format date and time as dd:mm-hh:mm
+        function formatDateTime(date) {
+            const dd = String(date.getDate()).padStart(2, '0');
+            const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const hh = String(date.getHours()).padStart(2, '0');
+            const min = String(date.getMinutes()).padStart(2, '0');
+            return `${dd}:${mm}-${hh}:${min}`;
+        }
+
+        // Format the page open time
+        const formattedTime = formatDateTime(pageOpenTime);
+
+        // Include the formatted time in the 'tn' parameter
+        let transactionNote = `Reg-${formattedTime}`; // Prefix 'Reg-' for identification
+
+        // Function to generate Intent URLs
+        function generateIntentUrls() {
+            const params = {
+                pa: upiId,
+                pn: payeeName,
+                am: amount,
+                cu: 'INR',
+                tn: transactionNote
+            };
+
+            const queryString = Object.keys(params)
+                .map(key => `${key}=${encodeURIComponent(params[key])}`)
+                .join('&');
+
+            // Intent URLs for different UPI apps
+            const gpayIntent = `intent://pay?${queryString}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end;`;
+            const paytmIntent = `intent://pay?${queryString}#Intent;scheme=upi;package=net.one97.paytm;end;`;
+            const phonepeIntent = `intent://pay?${queryString}#Intent;scheme=upi;package=com.phonepe.app;end;`;
+            const upiIntent = `intent://pay?${queryString}#Intent;scheme=upi;end;`;
+
+            // Update the hyperlinks
+            document.getElementById('gpayLink').href = gpayIntent;
+            document.getElementById('paytmLink').href = paytmIntent;
+            document.getElementById('phonepeLink').href = phonepeIntent;
+            document.getElementById('upiLink').href = upiIntent;
+        }
+
+        // Initial generation of Intent URLs
+        generateIntentUrls();
+
+        // Timer function
+        const timer = setInterval(function() {
+            const minutes = Math.floor(time / 60);
+            const seconds = time % 60;
+            countdownElement.innerText = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+            time--;
+
+            // When time runs out, reset price to ₹999
+            if (time < 0) {
+                clearInterval(timer);
+                countdownElement.innerText = "00:00";
+                discountedPriceElement.innerText = "₹999";
+                document.querySelector('.original-price').style.display = "none";
+                priceElement.innerText = "₹999";
+                currentPriceElement.innerText = "999";
+                amount = '999'; // Update amount
+
+                // Update transaction note with new time
+                const newFormattedTime = formatDateTime(new Date());
+                transactionNote = `Reg-${newFormattedTime}`;
+
+                earlyBirdOfferElement.innerText = "Offer expired. Please pay ₹999 to complete your registration.";
+                earlyBirdOfferElement.style.color = "#ff0000";
+
+                // Regenerate Intent URLs with the new amount and transaction note
+                generateIntentUrls();
+            }
+        }, 1000);
+
+        // Function to copy UPI ID to clipboard
+        document.getElementById("copyButton").addEventListener("click", function() {
+            var upiText = document.getElementById("upiId").innerText;
+            var tempInput = document.createElement("input");
+            tempInput.value = upiText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("UPI ID copied to clipboard: " + upiText);
+        });
+
+        // Prevent default action and handle clicks
+        const links = document.querySelectorAll('#links a');
+        links.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                // For iOS devices, Intent URLs won't work, so provide alternative instructions
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (isIOS) {
+                    alert('UPI payment links may not work on iOS devices. Please use manual payment instructions.');
+                    e.preventDefault();
+                    return;
+                }
+                // For Android devices, proceed with the Intent URL
+                // No need to prevent default action
+            });
+        });
+    </script>
 </body>
 </html>
