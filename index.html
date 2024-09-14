@@ -318,7 +318,7 @@
             const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
             const hh = String(date.getHours()).padStart(2, '0');
             const min = String(date.getMinutes()).padStart(2, '0');
-            return `${dd}:${mm}-${hh}:${min}`;
+            return `${dd}${mm}${hh}${min}`;
         }
 
         // Format the page open time
@@ -416,3 +416,4 @@
     </script>
 </body>
 </html>
+
