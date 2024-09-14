@@ -64,7 +64,7 @@
             color: #333;
         }
 
-        #copyButton {
+        .copy-button {
             border: none;
             background-color: #4CAF50;
             color: white;
@@ -76,7 +76,7 @@
             transition: background-color 0.3s ease;
         }
 
-        #copyButton:hover {
+        .copy-button:hover {
             background-color: #45a049;
         }
 
@@ -166,6 +166,20 @@
             margin-left: 20px;
         }
 
+        .manual-instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .manual-instructions .copy-button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 12px;
+            padding: 4px 8px;
+        }
+
         .qr-code {
             margin: 20px 0;
             text-align: center;
@@ -184,7 +198,7 @@
                 font-size: 14px;
             }
 
-            #copyButton {
+            .copy-button {
                 font-size: 12px;
                 padding: 4px 8px;
             }
@@ -213,6 +227,11 @@
             .upi-links a span {
                 font-size: 12px;
             }
+
+            .manual-instructions .copy-button {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
         }
     </style>
 </head>
@@ -237,7 +256,7 @@
         <!-- Display UPI ID -->
         <div class="upi-container">
             <span id="upiId">archoudhury1995@oksbi</span>
-            <button id="copyButton" title="Copy UPI ID">📋 Copy</button>
+            <button class="copy-button" data-copy-target="upiId" title="Copy UPI ID">📋 Copy</button>
         </div>
 
         <!-- UPI Payment Links with Logos -->
@@ -277,9 +296,15 @@
             <ol>
                 <li>Open your preferred UPI app.</li>
                 <li>Select the option to send money via UPI ID.</li>
-                <li>Enter the UPI ID: <strong>archoudhury1995@oksbi</strong></li>
+                <li>
+                    Enter the UPI ID: <strong id="manualUpiId">archoudhury1995@oksbi</strong>
+                    <button class="copy-button" data-copy-target="manualUpiId" title="Copy UPI ID">📋 Copy</button>
+                </li>
                 <li>Enter the amount: <strong>₹<span id="manualAmount">449</span></strong></li>
-                <li>Add a note: <strong id="manualNote">Payment for Registration</strong></li>
+                <li>
+                    Add a note: <strong id="manualNote">Payment for Registration</strong>
+                    <button class="copy-button" data-copy-target="manualNote" title="Copy Note">📋 Copy</button>
+                </li>
                 <li>Proceed to make the payment.</li>
             </ol>
         </div>
@@ -312,7 +337,7 @@
         // Capture the page open time
         const pageOpenTime = new Date();
 
-        // Function to format date and time as dd:mm-hh:mm
+        // Function to format date and time as ddmmhhmm
         function formatDateTime(date) {
             const dd = String(date.getDate()).padStart(2, '0');
             const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -330,8 +355,8 @@
         // Update manual note
         manualNoteElement.innerText = transactionNote;
 
-        // Function to generate Intent URLs
-        function generateIntentUrls() {
+        // Function to generate UPI URLs
+        function generateUpiUrls() {
             const params = {
                 pa: upiId,
                 pn: payeeName,
@@ -344,21 +369,17 @@
                 .map(key => `${key}=${encodeURIComponent(params[key])}`)
                 .join('&');
 
-            // Intent URLs for different UPI apps
-            const gpayIntent = `intent://pay?${queryString}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end;`;
-            const paytmIntent = `intent://pay?${queryString}#Intent;scheme=upi;package=net.one97.paytm;end;`;
-            const phonepeIntent = `intent://pay?${queryString}#Intent;scheme=upi;package=com.phonepe.app;end;`;
-            const upiIntent = `intent://pay?${queryString}#Intent;scheme=upi;end;`;
+            const upiUrl = `upi://pay?${queryString}`;
 
             // Update the hyperlinks
-            document.getElementById('gpayLink').href = gpayIntent;
-            document.getElementById('paytmLink').href = paytmIntent;
-            document.getElementById('phonepeLink').href = phonepeIntent;
-            document.getElementById('upiLink').href = upiIntent;
+            document.getElementById('gpayLink').href = upiUrl;
+            document.getElementById('paytmLink').href = upiUrl;
+            document.getElementById('phonepeLink').href = upiUrl;
+            document.getElementById('upiLink').href = upiUrl;
         }
 
-        // Initial generation of Intent URLs
-        generateIntentUrls();
+        // Initial generation of UPI URLs
+        generateUpiUrls();
 
         // Timer function
         const timer = setInterval(function() {
@@ -388,21 +409,30 @@
                 earlyBirdOfferElement.innerText = "Offer expired. Please pay ₹999 to complete your registration.";
                 earlyBirdOfferElement.style.color = "#ff0000";
 
-                // Regenerate Intent URLs with the new amount and transaction note
-                generateIntentUrls();
+                // Regenerate UPI URLs with the new amount and transaction note
+                generateUpiUrls();
             }
         }, 1000);
 
-        // Function to copy UPI ID to clipboard
-        document.getElementById("copyButton").addEventListener("click", function() {
-            var upiText = document.getElementById("upiId").innerText;
-            var tempInput = document.createElement("input");
-            tempInput.value = upiText;
+        // Function to handle copy button clicks
+        function copyToClipboard(elementId) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            const tempInput = document.createElement("input");
+            tempInput.value = textToCopy;
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
-            alert("UPI ID copied to clipboard: " + upiText);
+            alert(`Copied to clipboard: ${textToCopy}`);
+        }
+
+        // Attach event listeners to all copy buttons
+        const copyButtons = document.querySelectorAll('.copy-button');
+        copyButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-copy-target');
+                copyToClipboard(targetId);
+            });
         });
 
         // Handle clicks on links
@@ -410,10 +440,9 @@
         links.forEach(function(link) {
             link.addEventListener('click', function(e) {
                 // Allow the default action for all devices
-                // Note: UPI Intent URLs may not work on iOS devices
+                // Note: UPI URLs may not work on some browsers or devices
             });
         });
     </script>
 </body>
 </html>
-
