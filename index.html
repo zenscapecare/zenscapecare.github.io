@@ -4,7 +4,190 @@
     <meta charset="UTF-8">
     <title>UPI Payment</title>
     <style>
-        /* [Your existing CSS styles remain unchanged] */
+        /* CSS Styles */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #F2F6FE;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .content {
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .important {
+            font-weight: bold;
+            color: #d9534f;
+            margin-bottom: 15px;
+        }
+
+        .upi-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .upi-container span {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #copyButton {
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 14px;
+            margin-left: 8px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #copyButton:hover {
+            background-color: #45a049;
+        }
+
+        /* Styles for center-aligning the links */
+        .upi-links {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .upi-links ul {
+            list-style-type: none;
+            padding: 0;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .upi-links li {
+            margin-bottom: 10px;
+        }
+
+        .upi-links a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .upi-links a:hover {
+            text-decoration: underline;
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff0000;
+            margin-bottom: 20px;
+        }
+
+        .pricing {
+            font-size: 20px;
+            margin: 15px 0;
+        }
+
+        .pricing .original-price {
+            text-decoration: line-through;
+            color: #888;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .pricing .discounted-price {
+            font-weight: bold;
+            color: #28a745;
+            font-size: 22px;
+        }
+
+        .early-bird {
+            font-size: 18px;
+            color: #28a745;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .contact-info {
+            font-size: 14px;
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .manual-instructions {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .manual-instructions ol {
+            margin-left: 20px;
+        }
+
+        .qr-code {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .upi-container span {
+                font-size: 14px;
+            }
+
+            #copyButton {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+
+            .pricing .original-price {
+                font-size: 16px;
+            }
+
+            .pricing .discounted-price {
+                font-size: 20px;
+            }
+
+            .early-bird {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -42,6 +225,27 @@
             </ul>
         </div>
 
+        <!-- Manual Payment Instructions -->
+        <div class="manual-instructions">
+            <p>If you're unable to use the links above, please follow these steps to make a payment:</p>
+            <ol>
+                <li>Open your preferred UPI app.</li>
+                <li>Select the option to send money via UPI ID.</li>
+                <li>Enter the UPI ID: <strong>archoudhury1995@oksbi</strong></li>
+                <li>Enter the amount: <strong>₹<span id="manualAmount">449</span></strong></li>
+                <li>Add a note: <strong id="manualNote">Payment for Registration</strong></li>
+                <li>Proceed to make the payment.</li>
+            </ol>
+        </div>
+
+        <!-- QR Code (Optional) -->
+        <!--
+        <div class="qr-code">
+            <p>Alternatively, scan the QR code below to make the payment:</p>
+            <img src="path-to-qr-code-image.png" alt="UPI QR Code" style="max-width: 200px;">
+        </div>
+        -->
+
         <p class="important">Important: Your registration will be confirmed upon successful payment. In case of any issues with payment, please reach out to us via WhatsApp.</p>
         <p>Once the payment is confirmed, you will receive a confirmation message via WhatsApp by the end of the day. You will receive the link to the webinar one hour before the workshop starts.</p>
 
@@ -59,6 +263,8 @@
         const priceElement = document.getElementById("price");
         const discountedPriceElement = document.getElementById("discountedPrice");
         const currentPriceElement = document.getElementById("currentPrice");
+        const manualAmountElement = document.getElementById("manualAmount");
+        const manualNoteElement = document.getElementById("manualNote");
         const earlyBirdOfferElement = document.getElementById("earlyBirdOffer");
 
         const upiId = 'archoudhury1995@oksbi';
@@ -78,10 +284,13 @@
         }
 
         // Format the page open time
-        const formattedTime = formatDateTime(pageOpenTime);
+        let formattedTime = formatDateTime(pageOpenTime);
 
         // Include the formatted time in the 'tn' parameter
         let transactionNote = `Reg-${formattedTime}`; // Prefix 'Reg-' for identification
+
+        // Update manual note
+        manualNoteElement.innerText = transactionNote;
 
         // Function to generate Intent URLs
         function generateIntentUrls() {
@@ -129,11 +338,14 @@
                 document.querySelector('.original-price').style.display = "none";
                 priceElement.innerText = "₹999";
                 currentPriceElement.innerText = "999";
+                manualAmountElement.innerText = "999";
                 amount = '999'; // Update amount
 
                 // Update transaction note with new time
                 const newFormattedTime = formatDateTime(new Date());
-                transactionNote = `Reg-${newFormattedTime}`;
+                formattedTime = newFormattedTime;
+                transactionNote = `Reg-${formattedTime}`;
+                manualNoteElement.innerText = transactionNote;
 
                 earlyBirdOfferElement.innerText = "Offer expired. Please pay ₹999 to complete your registration.";
                 earlyBirdOfferElement.style.color = "#ff0000";
@@ -155,7 +367,7 @@
             alert("UPI ID copied to clipboard: " + upiText);
         });
 
-        // Prevent default action and handle clicks
+        // Handle clicks on links
         const links = document.querySelectorAll('#links a');
         links.forEach(function(link) {
             link.addEventListener('click', function(e) {
